@@ -2,16 +2,30 @@ from django.shortcuts import render,redirect
 from django.http import HttpRequest
 # Create your views here.
 from django.contrib import messages 
-from django .contrib .auth import login,logout,authenticate
-from django.contrib.auth.forms import UserCreationForm,AuthenticationForm
+from django .contrib .auth import login,logout,authenticate ,update_session_auth_hash
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm,AuthenticationForm,PasswordChangeForm
+
+def main(request):
+    return render(request,'main_site.html')
+
+def register(request):
+    if request.method == "POST":
+        registerform = UserCreationForm(request.POST)
+        if registerform.is_valid():
+            user = registerform .save()       
+            login(request,user)
+            return redirect ('/')
+    form = UserCreationForm()
+    return render(request,'register.html',context={"form":form})            
 
 def Login(request):
     form = AuthenticationForm()
     if request.method == "POST":
-        form = AuthenticationForm(request, data= request.POST)
-        if form.is_valid():
-            name = form.cleaned_data.get ('username')
-            password = form.cleaned_data.get ('password')
+        Loginform = AuthenticationForm(request, data= request.POST)
+        if Loginform.is_valid():
+            name = Loginform.cleaned_data.get ('username')
+            password = Loginform.cleaned_data.get ('password')
             user = authenticate(username=name,password=password)
             if user != None:
                 login(request ,user)
@@ -23,23 +37,20 @@ def Login(request):
             messages.error(request, f"帳號或密碼錯誤")
     return render(request,'Login.html',context={"form":form})
 
-def main(request):
-    return render(request,'main_site.html')
 
-def register(request):
-    if request.method == "POST":
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            user = form .save()
-            login(request,user)
-            return redirect ('/')
-            
-    form = UserCreationForm()
-    return render(request,'register.html',context={"form":form})
+
 
 def Logout(request):
     logout(request)
     messages.info(request, f"登出成功")
     return redirect('/')
+
+def ChangePassword(request):
     
-    
+    if request .method == "POST":
+        CPform = PasswordChangeForm(user=request.user,data = request.POST)
+        if CPform .is_valid():
+            CPform.save()
+            update_session_auth_hash(request,CPform .user)
+        return redirect('/')
+    return render(request ,'ChangePassword.html')
