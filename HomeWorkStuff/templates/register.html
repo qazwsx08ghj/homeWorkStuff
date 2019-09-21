@@ -10,6 +10,13 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   </head>
   <body>
+  {% if messages %}
+    {% for message in messages %}   
+        <script lang="Javascript">
+          alert("{{message}}")
+        </script>
+    {% endfor %}
+  {% endif %}
       <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
         <a class="navbar-brand" href="/">Back To Site</a>
         <button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse" data-target="#collapsibleNavId" aria-controls="collapsibleNavId"
@@ -21,7 +28,12 @@
     <div class="row container-fluid justify-content-center">
       <form method="POST" >
         {% csrf_token %}
-          {{form.as_p}}
+          <label for="">User Name</label>
+          <input type="Text" class="form-control" name="username" id="id_username" placeholder="">
+          <label for="">New Password</label>
+          <input type="password" class="form-control" name="password1" id="id_password1" placeholder="">
+          <label for="">New Password confirm</label>
+          <input type="password" class="form-control" name="password2" id="id_password2" placeholder="">
         <button type="submit" class="btn btn-primary">Register</button>
       </form>
     </div>

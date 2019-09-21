@@ -15,9 +15,10 @@ def register(request):
         if registerform.is_valid():
             user = registerform .save()       
             login(request,user)
+            messages.success(request, f"成功註冊")
             return redirect ('/')
     form = UserCreationForm()
-    return render(request,'register.html',context={"form":form})            
+    return render(request,'register.html',context={})            
 
 def Login(request):
     form = AuthenticationForm()
@@ -29,13 +30,13 @@ def Login(request):
             user = authenticate(username=name,password=password)
             if user != None:
                 login(request ,user)
-                messages.info(request, f"成功登入")
+                messages.success(request, f"成功登入")
                 return redirect ('/')
             else:
                 messages.error(request, f"帳號或密碼錯誤")
         else:
             messages.error(request, f"帳號或密碼錯誤")
-    return render(request,'Login.html',context={"form":form})
+    return render(request,'Login.html',context={})
 
 
 
@@ -50,6 +51,7 @@ def ChangePassword(request):
     if request .method == "POST":
         CPform = PasswordChangeForm(user=request.user,data = request.POST)
         if CPform .is_valid():
+            messages.info(request, f"密碼更換成功")
             CPform.save()
             update_session_auth_hash(request,CPform .user)
         return redirect('/')
