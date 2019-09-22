@@ -4,7 +4,7 @@ from django.http import HttpRequest
 from django.contrib import messages 
 from django .contrib .auth import login,logout,authenticate ,update_session_auth_hash
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm,AuthenticationForm,PasswordChangeForm
+from django.contrib.auth.forms import UserCreationForm,AuthenticationForm,PasswordChangeForm,UserChangeForm
 
 def main(request):
     return render(request,'main_site.html')
@@ -18,7 +18,7 @@ def register(request):
             messages.success(request, f"成功註冊")
             return redirect ('/')
     form = UserCreationForm()
-    return render(request,'register.html',context={})            
+    return render(request,'register.html')            
 
 def Login(request):
     form = AuthenticationForm()
@@ -36,7 +36,7 @@ def Login(request):
                 messages.error(request, f"帳號或密碼錯誤")
         else:
             messages.error(request, f"帳號或密碼錯誤")
-    return render(request,'Login.html',context={})
+    return render(request,'Login.html')
 
 
 
@@ -56,3 +56,4 @@ def ChangePassword(request):
             update_session_auth_hash(request,CPform .user)
         return redirect('/')
     return render(request ,'ChangePassword.html')
+
