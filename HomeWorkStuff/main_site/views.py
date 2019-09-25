@@ -2,7 +2,9 @@ from django.shortcuts import render,redirect
 from django.http import HttpRequest
 # Create your views here.
 from django.contrib import messages 
+
 from django .contrib .auth import login,logout,authenticate ,update_session_auth_hash
+from django.contrib.auth .decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm,AuthenticationForm,PasswordChangeForm,UserChangeForm
 
@@ -17,6 +19,12 @@ def register(request):
             login(request,user)
             messages.success(request, f"成功註冊")
             return redirect ('/')
+        else:
+            messages.success(request, f"註冊失敗")
+            return redirect('/')
+        
+
+            
     form = UserCreationForm()
     return render(request,'register.html')            
 
@@ -38,16 +46,12 @@ def Login(request):
             messages.error(request, f"帳號或密碼錯誤")
     return render(request,'Login.html')
 
-
-
-
 def Logout(request):
     logout(request)
     messages.info(request, f"登出成功")
     return redirect('/')
 
-def ChangePassword(request):
-    
+def ChangePassword(request):   
     if request .method == "POST":
         CPform = PasswordChangeForm(user=request.user,data = request.POST)
         if CPform .is_valid():
@@ -57,3 +61,14 @@ def ChangePassword(request):
         return redirect('/')
     return render(request ,'ChangePassword.html')
 
+@login_required
+def UserProfile(request):
+    print(request.POST.get('email'))
+    if request.method == "POST":
+        request.user.email = request.POST.get("email")
+        request.user.first_name = request .POST.get("first_name")
+        request.user.last_name = request .POST.get("last_name")
+        request.user.save()
+        messages.info(request, f"使用者資料更換成功")
+        return redirect ('/')
+    return render(request,'UserProfile.html')

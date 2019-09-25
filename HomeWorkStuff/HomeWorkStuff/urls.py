@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
-from main_site.views import register,main,Login,Logout,ChangePassword
+from main_site.views import register,main,Login,Logout,ChangePassword,UserProfile
 
 app_name = "main"
 
@@ -26,5 +26,5 @@ urlpatterns = [
     path('logout/',Logout,name = "Logout") ,
     path('login/',Login,name = "Login") ,
     path('changepassword/',ChangePassword,name = "ChangePassword"),
-
+    path ('userprofile/',UserProfile,name = "UserProfile")
 ]
