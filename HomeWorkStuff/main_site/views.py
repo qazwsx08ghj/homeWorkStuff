@@ -56,9 +56,12 @@ def ChangePassword(request):
     if request .method == "POST":
         CPform = PasswordChangeForm(user=request.user,data = request.POST)
         if CPform .is_valid():
+            user = User.objects.get (username = request.user.username)
             messages.info(request, f"密碼更換成功")
             CPform.save()
             update_session_auth_hash(request,CPform .user)
+            logout(request)
+            login(request,user)
         return redirect('/')
     return render(request ,'ChangePassword.html')
 
@@ -70,10 +73,8 @@ def UserProfile(request):
         request.user.first_name = request .POST.get("first_name")
         request.user.last_name = request .POST.get("last_name")
         request.user.save()
-
-
+        # models
         OpenUserProfile = userProfile()
-        
         OpenUserProfile.USER = User.objects.get(username=request.user.username)
         OpenUserProfile.hobbies = request.POST.get("hobbies")
         OpenUserProfile.selfIntroduction = request.POST.get("introduction")
