@@ -7,7 +7,7 @@ from django .contrib .auth import login,logout,authenticate ,update_session_auth
 from django.contrib.auth .decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm,AuthenticationForm,PasswordChangeForm,UserChangeForm
-
+from main_site.models import userProfile
 def main(request):
     return render(request,'main_site.html')
 
@@ -51,6 +51,7 @@ def Logout(request):
     messages.info(request, f"登出成功")
     return redirect('/')
 
+@login_required
 def ChangePassword(request):   
     if request .method == "POST":
         CPform = PasswordChangeForm(user=request.user,data = request.POST)
@@ -69,6 +70,14 @@ def UserProfile(request):
         request.user.first_name = request .POST.get("first_name")
         request.user.last_name = request .POST.get("last_name")
         request.user.save()
+
+
+        OpenUserProfile = userProfile()
+        
+        OpenUserProfile.USER = User.objects.get(username=request.user.username)
+        OpenUserProfile.hobbies = request.POST.get("hobbies")
+        OpenUserProfile.selfIntroduction = request.POST.get("introduction")
+        OpenUserProfile.save()
         messages.info(request, f"使用者資料更換成功")
         return redirect ('/')
     return render(request,'UserProfile.html')
