@@ -56,13 +56,16 @@ def ChangePassword(request):
     if request .method == "POST":
         CPform = PasswordChangeForm(user=request.user,data = request.POST)
         if CPform .is_valid():
-            user = User.objects.get (username = request.user.username)
             messages.info(request, f"密碼更換成功")
             CPform.save()
             update_session_auth_hash(request,CPform .user)
+
+            user = User.objects.get (username = request.user.username)
             logout(request)
             login(request,user)
-        return redirect('/')
+            return redirect('/')
+        else:
+            messages.info(request, f"密碼更換失敗")
     return render(request ,'ChangePassword.html')
 
 @login_required
@@ -81,4 +84,6 @@ def UserProfile(request):
         OpenUserProfile.save()
         messages.info(request, f"使用者資料更換成功")
         return redirect ('/')
+    else:
+        messages.info(request, f"使用者資料更換失敗")
     return render(request,'UserProfile.html')
