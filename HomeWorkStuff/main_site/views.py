@@ -7,9 +7,16 @@ from django .contrib .auth import login,logout,authenticate ,update_session_auth
 from django.contrib.auth .decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm,AuthenticationForm,PasswordChangeForm,UserChangeForm
-from main_site.models import userProfile
+from main_site.models import userProfile,userArticle
+
+
+
 def main(request):
-    return render(request,'main_site.html')
+    
+    user_Article_data= userArticle.objects.all()
+
+    return render(request,'main_site.html',{'user_Article_data':user_Article_data})
+
 
 def register(request):
     if request.method == "POST":
@@ -70,7 +77,6 @@ def ChangePassword(request):
 
 @login_required
 def UserProfile(request):
-    print(request.POST.get('email'))
     if request.method == "POST":
         request.user.email = request.POST.get("email")
         request.user.first_name = request .POST.get("first_name")
@@ -87,3 +93,15 @@ def UserProfile(request):
     else:
         messages.info(request, f"使用者資料更換失敗")
     return render(request,'UserProfile.html')
+
+
+
+def PostArticleCreate(request):
+    if request.method == "POST":
+        OpenUserArticle = userArticle()
+        OpenUserArticle.USER = request.user
+        OpenUserArticle.Article_title = request.POST.get("Article_title")
+        OpenUserArticle.Article = request.POST.get("Article")
+        OpenUserArticle.save()
+        return redirect ('/')
+    return render (request,'PostArticlePage.html')

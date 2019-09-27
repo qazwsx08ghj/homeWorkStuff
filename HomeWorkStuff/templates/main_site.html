@@ -17,7 +17,7 @@
         </script>
     {% endfor %}
   {% endif %}
-      <nav class="navbar  navbar-expand-sm navbar-dark bg-secondary">
+      <nav class="navbar sticky-top navbar-expand-sm navbar-dark bg-secondary">
             <a class="navbar-brand" href="#">SITE</a>
             <button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse" data-target="#collapsibleNavId" aria-controls="collapsibleNavId"
                 aria-expanded="false" aria-label="Toggle navigation">
@@ -30,12 +30,12 @@
                     <div class="dropdown-menu" aria-labelledby="dropdownId">
                       {% if user.is_authenticated %}
                         {% if user.is_superuser %}
-                          <a class="dropdown-item" href="#">Home</a>
+                          <a class="dropdown-item" href="postarticlecreate/">Post Your Article</a>
                           <a class="dropdown-item" href="/changepassword">Change Password</a>
                           <a class="dropdown-item" href="/admin">Admin Page</a>
                           <a class="dropdown-item" href="/logout">Logout</a>
                         {% else %}
-                          <a class="dropdown-item" href="#">Home</a>
+                        <a class="dropdown-item" href="postarticlecreate/">Post Your Article</a>
                           <a class="dropdown-item" href="userprofile/">User Profile</a>
                           <a class="dropdown-item" href="/changepassword">Change Password</a>
                           <a class="dropdown-item" href="/logout">Logout</a>
@@ -50,7 +50,24 @@
                 </ul>
             </div>
       </nav>
-        
+      {% for user_Article in user_Article_data|slice:"::-1" %}
+        <div style= "margin:1rem" class="row justify-content-center">
+          <div class="col-sm-6">
+            <div class="row card text-center bg-secondary">
+                <div class="card-header text-light font-weight-bold">
+                    <h3>Writer By {{user_Article.USER}}<h3>
+                </div>
+                <div class="row">
+                  <div class="card-body">
+                    <h5 class="card-title">{{user_Article.Article_title}}</h5>
+                    <p class="card-text text-lg-left">{{user_Article.Article}}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>          
+      {% endfor %}
+      
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
