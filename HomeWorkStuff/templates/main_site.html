@@ -18,7 +18,7 @@
     {% endfor %}
   {% endif %}
       <nav class="navbar sticky-top navbar-expand-sm navbar-dark bg-secondary">
-            <a class="navbar-brand" href="#">SITE</a>
+            <a class="navbar-brand" href="/">SITE</a>
             <button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse" data-target="#collapsibleNavId" aria-controls="collapsibleNavId"
                 aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -41,13 +41,16 @@
                           <a class="dropdown-item" href="/logout">Logout</a>
                         {% endif %}
                       {% else %}
-                        <a class="dropdown-item" href="#">Home</a>
                         <a class="dropdown-item" href="/login/">Login</a>
                         <a class="dropdown-item" href="/register/">Register</a>
                       {% endif %}
                     </div>
                 </li>
                 </ul>
+                <form class="form-inline my-2 my-lg-0">
+                  <input class="form-control mr-sm-2" type="search" name="search" id="search" placeholder="Search User's Post" aria-label="search">
+                  <button class="btn btn-outline-light my-2 my-sm-0"  type="submit">Search</button>
+                </form>
             </div>
       </nav>
       {% for user_Article in user_Article_data|slice:"::-1" %}
@@ -55,7 +58,7 @@
           <div class="col-sm-6">
             <div class="row card text-center bg-secondary">
                 <div class="card-header text-light font-weight-bold">
-                    <h3>Writer By {{user_Article.USER}}<h3>
+                    <h3>Writer By {{user_Article.Article_writer}}<h3>
                 </div>
                 <div class="row">
                   <div class="card-body">
@@ -65,8 +68,18 @@
                 </div>
               </div>
             </div>
-          </div>          
-      {% endfor %}
+          </div>
+          {% empty %}
+          <div style= "margin:1rem" class="row justify-content-center">
+            <div class="col-sm-6">
+              <div class="row card text-center bg-secondary">
+                  <div class="card-header text-light font-weight-bold">
+                      <h3>We can't find this writer<h3>
+                  </div>
+                </div>
+              </div>
+            </div>    
+        {% endfor %}
       
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->

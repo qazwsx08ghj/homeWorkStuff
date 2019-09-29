@@ -14,6 +14,7 @@ class  userProfile(models.Model):
 class userArticle(models.Model):
     id = models.AutoField(primary_key=True)
     USER = models.ForeignKey(User, on_delete = models.CASCADE,null= True)
+    Article_writer = models.CharField(max_length = 255,null=True ,blank = True)
     Article_title = models.CharField(max_length = 255,null=True ,blank = True)
     Article = models.TextField(null=True,blank = True)
     def __str__(self):

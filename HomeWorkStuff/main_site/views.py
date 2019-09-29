@@ -8,13 +8,14 @@ from django.contrib.auth .decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm,AuthenticationForm,PasswordChangeForm,UserChangeForm
 from main_site.models import userProfile,userArticle
-
-
+from django.forms.models import model_to_dict
 
 def main(request):
-    
     user_Article_data= userArticle.objects.all()
-
+    
+    if 'search' in request.GET:
+        search = request.GET['search']
+        user_Article_data = userArticle.objects.filter(Article_writer = search)
     return render(request,'main_site.html',{'user_Article_data':user_Article_data})
 
 
@@ -100,8 +101,11 @@ def PostArticleCreate(request):
     if request.method == "POST":
         OpenUserArticle = userArticle()
         OpenUserArticle.USER = request.user
+        OpenUserArticle.Article_writer = request.POST.get("writer")
         OpenUserArticle.Article_title = request.POST.get("Article_title")
         OpenUserArticle.Article = request.POST.get("Article")
         OpenUserArticle.save()
         return redirect ('/')
     return render (request,'PostArticlePage.html')
+
+
