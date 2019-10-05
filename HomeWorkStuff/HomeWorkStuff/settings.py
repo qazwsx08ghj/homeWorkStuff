@@ -24,7 +24,7 @@ SECRET_KEY = 'elk6&rv&b#3w3uifi-a8u5+rnhj&!y#!*%++!39!654c(fmca^'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
-ALLOWED_HOSTS = ['www.qazwsx08ghj-site.tk','qaq2016712site.serveirc.com','qaq2016712site.hopto.org']
+ALLOWED_HOSTS = ['www.qazwsx08ghj-site.tk','qaq2016712site.serveirc.com','qaq2016712site.hopto.org','*']
 
 
 # Application definition
