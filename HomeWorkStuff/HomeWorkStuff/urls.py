@@ -14,18 +14,34 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path,include
-from main_site.views import register,main,Login,Logout,ChangePassword,UserProfile,PostArticleCreate
+from django.urls import path, include
 
+from main_site.views import register, main, Login, \
+    Logout, \
+    ChangePassword, \
+    UserProfile, \
+    PostArticleCreate, \
+    UserViewSet, \
+    userProfileViewSet, \
+    userArticleViewSet
+
+from rest_framework import routers
+
+router = routers.DefaultRouter()
+router.register(r'users', UserViewSet)
+router.register(r'userProfiles', userProfileViewSet)
+router.register(r'userArticle', userArticleViewSet)
 app_name = "main"
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',main,name = "index"),
-    path('register/',register,name = "register"),
-    path('logout/',Logout,name = "Logout") ,
-    path('login/',Login,name = "Login") ,
-    path('changepassword/',ChangePassword,name = "ChangePassword"),
-    path ('userprofile/',UserProfile,name = "UserProfile"),
-    path('postarticlecreate/',PostArticleCreate,name ="PostArticleCreate"),
+    path('', main, name="index"),
+    path('register/', register, name="register"),
+    path('logout/', Logout, name="Logout"),
+    path('login/', Login, name="Login"),
+    path('changepassword/', ChangePassword, name="ChangePassword"),
+    path('userprofile/', UserProfile, name="UserProfile"),
+    path('postarticlecreate/', PostArticleCreate, name="PostArticleCreate"),
+    path('api/', include(router.urls)),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]

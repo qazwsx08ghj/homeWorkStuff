@@ -1,5 +1,4 @@
 from django.shortcuts import render, redirect
-from django.http import HttpRequest
 # Create your views here.
 from django.contrib import messages
 
@@ -8,7 +7,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm, UserChangeForm
 from main_site.models import userProfile, userArticle
-from django.forms.models import model_to_dict
+from rest_framework import viewsets
+from .serializers import UserSerializer, userProfileSerializer, userArticleSerializer
 
 
 def main(request):
@@ -44,7 +44,7 @@ def Login(request):
             name = Loginform.cleaned_data.get('username')
             password = Loginform.cleaned_data.get('password')
             user = authenticate(username=name, password=password)
-            if user != None:
+            if user is not None:
                 login(request, user)
                 messages.success(request, f"成功登入")
                 return redirect('/')
@@ -126,3 +126,21 @@ def PostArticleCreate(request):
         OpenUserArticle.save()
         return redirect('/')
     return render(request, 'PostArticlePage.html')
+
+
+class UserViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = User.objects.all().order_by('-date_joined')
+    serializer_class = UserSerializer
+
+
+class userProfileViewSet(viewsets.ModelViewSet):
+    queryset = userProfile.objects.all()
+    serializer_class = userProfileSerializer
+
+
+class userArticleViewSet(viewsets.ModelViewSet):
+    queryset = userArticle.objects.all()
+    serializer_class = userArticleSerializer
