@@ -15,7 +15,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-
+from rest_framework import routers
+from django.contrib.auth import views as auth_views
 from main_site.views import register, main, Login, \
     Logout, \
     ChangePassword, \
@@ -23,14 +24,17 @@ from main_site.views import register, main, Login, \
     PostArticleCreate, \
     UserViewSet, \
     userProfileViewSet, \
-    userArticleViewSet
+    userArticleViewSet, \
+    GroupViewSet
 
-from rest_framework import routers
+
+
 
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
 router.register(r'userProfiles', userProfileViewSet)
 router.register(r'userArticle', userArticleViewSet)
+router.register(r'groups', GroupViewSet)
 app_name = "main"
 
 urlpatterns = [
@@ -43,5 +47,7 @@ urlpatterns = [
     path('userprofile/', UserProfile, name="UserProfile"),
     path('postarticlecreate/', PostArticleCreate, name="PostArticleCreate"),
     path('api/', include(router.urls)),
-    path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    path('accounts/', include('django.contrib.auth.urls')),
+
 ]

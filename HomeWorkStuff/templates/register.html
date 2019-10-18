@@ -28,8 +28,11 @@
     <div class="row container-fluid justify-content-center text-light">
       <form method="POST" >
         {% csrf_token %}
+
           <label for="">User Name</label>
           <input type="Text" class="form-control" name="username" id="id_username" placeholder="">
+          <label for="">Email</label>
+          <input type="Text" class="form-control" name="email" id="email" placeholder="">
           <label for="">Password</label>
           <input type="password" class="form-control" name="password1" id="id_password1" placeholder="">
           <label for="">Password confirm</label>

@@ -24,29 +24,29 @@
           <div class="row">
             <div class="col">
                 <label for="">Your Email</label>
-                <input type="email" class="form-control" name="email" id="email" aria-describedby="helpId" placeholder="">
+                <input type="email" class="form-control" name="email" id="email" aria-describedby="helpId" placeholder="{{ user.email }}">
             </div>
           </div>
           <div class="row">
             <div class="col">
               <label for="">Your First name</label>
-              <input type="text" class="form-control" name="first_name" id="first_name" aria-describedby="helpId" placeholder="">
+              <input type="text" class="form-control" name="first_name" id="first_name" aria-describedby="helpId" placeholder="{{ user.first_name }}">
             </div>
             <div class="col">
                 <label for="">Your Last name</label>
-                <input type="text" class="form-control" name="last_name" id="last_name" aria-describedby="helpId" placeholder="">
+                <input type="text" class="form-control" name="last_name" id="last_name" aria-describedby="helpId" placeholder="{{ user.last_name }}">
             </div>
           </div>
           <div class="row">
             <div class="col">
                 <label for="">Your Hobbies</label>
-                <input type="text" class="form-control" name="hobbies" id="hobbies" aria-describedby="helpId" placeholder="">
+                <input type="text" class="form-control" name="hobbies" id="hobbies" aria-describedby="helpId" placeholder="{{ userProfiles.hobbies }}">
             </div>
           </div>
           <div class="row">
             <div class="col">
                 <label for="">Your Introduction</label>
-                <textarea class="form-control" name="introduction" id="introduction" rows="3"></textarea>
+                <textarea class="form-control" name="introduction" id="introduction" rows="3" placeholder="{{ userProfiles.selfIntroduction }}"></textarea>
             </div>
           </div>
           <div class="row">

@@ -4,11 +4,11 @@ from django.contrib import messages
 
 from django.contrib.auth import login, logout, authenticate, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm, UserChangeForm
+from django.contrib.auth.models import User, Group
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm
 from main_site.models import userProfile, userArticle
 from rest_framework import viewsets
-from .serializers import UserSerializer, userProfileSerializer, userArticleSerializer
+from .serializers import UserSerializer, userProfileSerializer, userArticleSerializer, GroupSerializer
 
 
 def main(request):
@@ -25,6 +25,7 @@ def register(request):
         registerform = UserCreationForm(request.POST)
         if registerform.is_valid():
             user = registerform.save()
+            request.user.email = request.POST.get("email")
             login(request, user)
             messages.success(request, f"成功註冊")
             return redirect('/')
@@ -56,8 +57,9 @@ def Login(request):
 
 
 def Logout(request):
-    logout(request)
     messages.info(request, f"登出成功")
+    logout(request)
+
     return redirect('/')
 
 
@@ -81,6 +83,7 @@ def ChangePassword(request):
 
 @login_required
 def UserProfile(request):
+    userProfiles = userProfile.objects.get(USER=User.objects.get(username=request.user.username))
     if request.method == "POST":
         openUser = User()
 
@@ -113,7 +116,9 @@ def UserProfile(request):
         # )
         messages.info(request, f"使用者資料更換成功")
         return redirect('/')
-    return render(request, 'UserProfile.html')
+    return render(request, 'UserProfile.html',
+                  {"userProfiles": userProfiles}
+                  )
 
 
 def PostArticleCreate(request):
@@ -132,8 +137,16 @@ class UserViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
     """
-    queryset = User.objects.all().order_by('-date_joined')
+    queryset = User.objects.all()
     serializer_class = UserSerializer
+
+
+class GroupViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows groups to be viewed or edited.
+    """
+    queryset = Group.objects.all()
+    serializer_class = GroupSerializer
 
 
 class userProfileViewSet(viewsets.ModelViewSet):
@@ -144,3 +157,7 @@ class userProfileViewSet(viewsets.ModelViewSet):
 class userArticleViewSet(viewsets.ModelViewSet):
     queryset = userArticle.objects.all()
     serializer_class = userArticleSerializer
+
+
+def userForgotPassword(request):
+    return render(request)
