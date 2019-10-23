@@ -25,9 +25,16 @@ def register(request):
         registerform = UserCreationForm(request.POST)
         if registerform.is_valid():
             user = registerform.save()
-            request.user.email = request.POST.get("email")
             login(request, user)
             messages.success(request, f"成功註冊")
+
+            UserObj = User.objects.get(username=request.user.username)
+            UserObj.email = request.POST.get("email")
+            UserObj.save()
+
+            obj = userProfile()
+            obj.USER = User.objects.get(username=request.user.username)
+            obj.save()
             return redirect('/')
         else:
             messages.success(request, f"註冊失敗")
@@ -83,21 +90,14 @@ def ChangePassword(request):
 
 @login_required
 def UserProfile(request):
-    userProfiles = userProfile.objects.get(USER=User.objects.get(username=request.user.username))
+    userProfiles_data = userProfile.objects.get(USER=User.objects.get(username=request.user.username))
     if request.method == "POST":
-        openUser = User()
-
         request.user.email = request.POST.get("email")
         request.user.first_name = request.POST.get("first_name")
         request.user.last_name = request.POST.get("last_name")
         request.user.save()
 
-        # models
-        # OpenUserProfile = userProfile()
-        # OpenUserProfile.USER = User.objects.get(username=request.user.username)
-        # OpenUserProfile.hobbies = request.POST.get("hobbies")
-        # OpenUserProfile.selfIntroduction = request.POST.get("introduction")
-        # OpenUserProfile.save()
+        # update_or_create
         userProfile.objects.update_or_create(
             USER=User.objects.get(username=request.user.username),
             defaults={
@@ -105,22 +105,15 @@ def UserProfile(request):
                 'selfIntroduction': request.POST.get("introduction"),
             }
         )
-        # OpenUserProfile.objects.update_or_create(
-        #     USER = User.objects.get(username=request.user.username),
-        #     hobbies = request.POST.get("hobbies"),
-        #     selfIntroduction =request.POST.get("introduction"),
-        #     defaults= {
-        #         'USER' : User.objects.get(username=request.user.username)
-        #     }
-        #
-        # )
+
         messages.info(request, f"使用者資料更換成功")
         return redirect('/')
     return render(request, 'UserProfile.html',
-                  {"userProfiles": userProfiles}
+                  {'userProfiles_data': userProfiles_data}
                   )
 
 
+# Post Article
 def PostArticleCreate(request):
     if request.method == "POST":
         OpenUserArticle = userArticle()
@@ -133,18 +126,13 @@ def PostArticleCreate(request):
     return render(request, 'PostArticlePage.html')
 
 
+# API
 class UserViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows users to be viewed or edited.
-    """
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
 
 class GroupViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows groups to be viewed or edited.
-    """
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
 
@@ -159,5 +147,6 @@ class userArticleViewSet(viewsets.ModelViewSet):
     serializer_class = userArticleSerializer
 
 
+# forgot password
 def userForgotPassword(request):
     return render(request)
