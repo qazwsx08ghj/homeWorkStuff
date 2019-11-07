@@ -31,7 +31,7 @@ Site: www.qazwsx08ghj-site.tk
 輸入ls確認
 以下是範例的回覆
 ```ls 
-C:\Users\qazwsx08ghj\Desktop\homeWorkStuff\HomeWorkStuff> ls
+C:\Users\your_file_name\your_file_name2\homeWorkStuff\HomeWorkStuff> ls
 
 
     Directory: C:\Users\your_file_name\your_file_name2\HomeWorkStuff\HomeWorkStuff
