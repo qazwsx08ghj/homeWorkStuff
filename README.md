@@ -16,7 +16,7 @@ Site: www.qazwsx08ghj-site.tk
 
 安裝套件:
 
-```pip install requirement.txt```
+```pip install -r requirement.txt```
 
 
 ## 第二步
