@@ -54,10 +54,3 @@ d-----     2019/10/23  下午 04:52                templates
 用manage.py建立伺服器
 
 ```python manage.py runserver 127.0.0.1:80```
-
-
-# 更新
-I add some features include user can add there profile and pose there article in main site to share there idea.
-
-
-With advice from someone inside intel www
